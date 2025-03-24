@@ -1,0 +1,34 @@
+.product-card {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto auto;
+	max-width: 100%;
+	max-height: auto;
+	background-color: #fff;
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	transition: 0.8s ease-in-out;
+}
+
+
+.product-card-cover img {
+	max-width: 100%;
+	height: auto;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+.product-card-details {
+	width: 100%;
+	padding: 10px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto auto;
+}
+
+.product-name {
+	white-space: nowrap; 
+	width: 100%; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
