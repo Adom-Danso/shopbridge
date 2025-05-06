@@ -1,69 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router'
-import axios from 'axios'
+import { createContext, useContext, useState } from "react"
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
-import RegisterBuyer from './pages/auth/RegisterBuyer'
-import LoginBuyer from './pages/auth/LoginBuyer'
-import RegisterSeller from './pages/auth/RegisterSeller'
+import { appTheme, AppThemeContextProvider } from './theme'
+import SellerPage from "./scenes/seller"
+import BuyerPage from "./scenes/buyer"
 
-import HomePage from './pages/buyer/HomePage'
+const UserContext = createContext()
 
-import Dashboard from './pages/seller/Dashboard'
-import SellerProductsPage from './pages/seller/Products'
-
-function App() {
-  const apiUrl = import.meta.env.VITE_API_URL
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [currentUser, setCurrentUser] = useState(null)
-  const [currentUserType, setCurrentUserType] = useState(null)
-
-  const fetchCurrentUser = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/api/auth/get-current-user`, {
-        method: "GET",
-        credentials: "include"
-      });
-
-      if (!response.ok) {
-        console.log("No user session found");
-        return;
-      }
-
-      const data = await response.json();
-      setCurrentUser(data.user);
-      setCurrentUserType(data.type);
-      setIsLoggedIn(data.isLoggedIn)
-    } catch (error) {
-      console.error("Error fetching current user", error);
-    }
-  };
-
-  const initialiseApp = async () => {
-    await fetchCurrentUser()
-  }
-
-  useEffect(() => {
-    initialiseApp()
-  }, [apiUrl])
-
+const App = () => {
+  const userData = {type: "buyer", id: 2}
+  const [theme, toggleColorMode] = appTheme() // get the cached theme and toggleColorMode function
+  const [ currentUser, setCurrentUser ] = useState(userData)
+  
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} />} />
-        { !isLoggedIn ? (
-            <>
-              <Route path="/user/register" element={<RegisterBuyer fetchCurrentUser={fetchCurrentUser}/>} />
-              <Route path="/seller/register" element={<RegisterSeller fetchCurrentUser={fetchCurrentUser}/>} />
-              <Route path="/user/login" element={<LoginBuyer fetchCurrentUser={fetchCurrentUser} />} />
-            </>
-          ) : (
-            <>
-              <Route path="/seller/dashboard" element={<Dashboard isLoggedIn={isLoggedIn} />} />
-              <Route path="/seller/products" element={<SellerProductsPage isLoggedIn={isLoggedIn} />} />
-            </>
-          )}
-      </Routes>
-    </>
+    <UserContext.Provider value={currentUser}>
+      <AppThemeContextProvider.Provider value={toggleColorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {
+            currentUser.type === "seller"
+            ? <SellerPage />
+            : <BuyerPage />
+          }
+          {/*<SellerPage />*/}
+        </ThemeProvider>
+      </AppThemeContextProvider.Provider>
+    </UserContext.Provider>
   )
 }
 
