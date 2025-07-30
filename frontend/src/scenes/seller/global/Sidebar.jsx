@@ -78,7 +78,7 @@ const Sidebar = () => {
           <Item title="My Poducts" to="/products" selected={selected} setSelected={setSelected} icon={<Inventory2OutlinedIcon />} />
           <Item title="Add Product" to="/add-product" selected={selected} setSelected={setSelected} icon={<AddBoxOutlinedIcon />} />
 
-          {!collapsed && <Typography variant="h5" m="15px 0 0 20px" style={{color: colors.grey[200]}} style={{color: colors.grey[200]}}>Orders</Typography>}
+          {!collapsed && <Typography variant="h5" m="15px 0 0 20px" style={{color: colors.grey[200]}}>Orders</Typography>}
           <Item title="My Orders" to="/orders" selected={selected} setSelected={setSelected} icon={<ShoppingCartOutlinedIcon/>} />
           <Item title="Invoices" to="/invoices" selected={selected} setSelected={setSelected} icon={<ReceiptLongOutlinedIcon/>} />
 

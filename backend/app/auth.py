@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify, session
 
 auth = Blueprint("auth", __name__)
 
-@auth.route("get-current-user", methods=["GET"])
+@auth.route("/get-current-user", methods=["GET"])
 def get_current_user():
 	user_id = session.get("user_id", None)
 	user_type = session.get("user_type", None)
@@ -77,7 +77,7 @@ def register_seller():
 	shop_name = request.json.get("shopName")
 	email = request.json.get("email")
 
-	new_seller = Seller(name=name, shop_name=shop_name,email=email)
+	new_seller = Seller(name=name, shop_name=shop_name, email=email)
 	new_seller.set_password(request.json.get("password"))
 	db.session.add(new_seller)
 	db.session.commit()
@@ -97,7 +97,7 @@ def login_seller():
 		return jsonify({"msg": "Incorrect email or password"}), 401
 
 	session["user_id"] = seller.id
-	session["user_type"] = "buyer"
+	session["user_type"] = "seller"
 	return jsonify({
 		"msg": "Login successful",
 		"seller": seller.to_json()

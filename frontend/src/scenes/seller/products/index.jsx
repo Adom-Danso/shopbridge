@@ -16,7 +16,7 @@ const Products = ({ setSelectedProduct }) => {
 
 	const columns = [
 	  { field: 'id', headerName: 'ID', flex: 'auto' },
-	  { field: 'title', headerName: 'Name', flex: 1, editable: true },
+	  { field: 'name', headerName: 'Name', flex: 1, editable: true },
 	  { field: 'description', headerName: 'Description', flex: 1, editable: true },
 	  { field: 'price', headerName: 'Price', flex: "auto", editable: true },
 	  {
