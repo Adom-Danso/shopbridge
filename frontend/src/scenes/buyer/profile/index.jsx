@@ -20,7 +20,7 @@ const Profile = () => {
 	const colors = themeColors(theme.palette.mode)
 
 	return (
-		<Box backgroundColor="blue" height="100%" p="64px 0 0 0" display="flex" justifyContent="center" alignItems="center">
+		<Box backgroundColor="blue" height="100%" display="flex" justifyContent="center" alignItems="center">
 			<Box backgroundColor="green" height="80%" width="80%">
 				<Box display="flex" justifyContent="center" p="10px">
 					<Typography variant="h2" fontWeight="bold">My Profile</Typography>

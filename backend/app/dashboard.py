@@ -76,3 +76,12 @@ def get_dashboard_overview():
 		"totalOrders": total_orders,
 		"totalProducts": total_products
 	})
+
+@dashboard.route("/get-categories", methods=["GET"])
+def get_categories():
+	query = db.session.query(Category).all()
+	print(query, flush=True)
+
+	category_li = [category.to_json() for category in query]
+
+	return jsonify({"categories": category_li})

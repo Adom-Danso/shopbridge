@@ -153,3 +153,9 @@ class Category(db.Model):
 	description = db.Column(db.String(255), nullable=True)
 
 	products = db.relationship("Product", backref="category", lazy=True, cascade="all, delete")
+
+	def to_json(self):
+		return {
+			"name": self.name,
+			"description": self.description
+		}

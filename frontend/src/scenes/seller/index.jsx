@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Routes, Route } from "react-router"
-import Topbar from "./global/Topbar";
-import Sidebar from "./global/Sidebar";
+import Topbar from "./components/Topbar";
+import Sidebar from "./components/Sidebar";
 import Products from "./products";
 import AddProduct from "./products/Form";
 import Orders from "./orders";

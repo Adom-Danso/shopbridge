@@ -1,10 +1,12 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import { appTheme, AppThemeContextProvider } from './theme'
-import SellerPage from "./scenes/seller"
-import BuyerPage from "./scenes/buyer"
+import { appTheme, AppThemeContextProvider } from './theme';
+import SellerPage from "./scenes/seller";
+import BuyerPage from "./scenes/buyer";
+
+
 
 const UserContext = createContext()
 
@@ -23,7 +25,6 @@ const App = () => {
             ? <SellerPage />
             : <BuyerPage />
           }
-          {/*<SellerPage />*/}
         </ThemeProvider>
       </AppThemeContextProvider.Provider>
     </UserContext.Provider>

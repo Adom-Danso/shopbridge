@@ -5,20 +5,28 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import { Link } from "react-router"
-import { Box, useTheme, Typography } from "@mui/material"
+import { Box, useTheme, Typography, Paper } from "@mui/material"
 import { styled, alpha } from '@mui/material/styles';
 import { useState } from "react"
 
 import { themeColors } from "../../../theme";
+import { categories } from "../../data/mockData";
+
+const CategoryLink = (name) => {
+  const theme = useTheme()
+	const colors = themeColors(theme.palette.mode)
+
+  return (
+    <Typography>{name}</Typography>
+  )
+}
 
 const Navbar = () => {
 	const theme = useTheme()
@@ -35,7 +43,7 @@ const Navbar = () => {
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1, position: "relative" }}>
+		<Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{ width: "100%", backgroundColor: colors.blueAccent[600] }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between"}}>
           <Box display="flex" justifyContent="space-evenly" alignItems="center">
@@ -107,15 +115,16 @@ const Navbar = () => {
           {/*<Button color="inherit"><Typography>Login</Typography></Button>*/}
         </Toolbar>
       </AppBar>
-      <Box sx={{ alignSelf: "center", flexGrow: 1, position: "fixed"}}>
-        <Typography>X</Typography>
-      </Box>
+      <Paper sx={{display: "flex", justifyContent: "space-evenly", width: "100%", position: "fixed", top: "64px", bgcolor: colors.blueAccent[400], borderRadius: 0, color: "white", padding: "3px 0" }} elevation={ 2 }>
+        { categories.map((category, index) => (<Typography key={index} sx={{
+							whiteSpace: "nowrap",
+							overflow: "hidden",
+							textOverflow: "ellipsis",
+						}} >{category.name}</Typography>)) }
+      </Paper>
 		</Box>
 	)
 }
-
-
-
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',

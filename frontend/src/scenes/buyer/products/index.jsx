@@ -48,7 +48,7 @@ const Products = () => {
 	};
 
 	return (
-		<Box sx={{ display: "flex" }}  height="100%" p="64px 0 0 0">
+		<Box sx={{ display: "flex" }}  height="100%">
 			<Grid container columns={{ xs: 4, sm: 8, md: 10, lg: 12}} spacing={{ xs: 2, md: 3}} sx={{ padding: 2 }}>
 				{ mockDataProducts.map((product) => (<ProductCard key={product.id} {...product} onClick={() => handleOpen(product)} />)) }
 				<ProductCardPopOver open={open} handleClose={handleClose} product={selectedProduct || {}} />

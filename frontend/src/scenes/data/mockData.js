@@ -36054,3 +36054,58 @@ export const mockDataProducts2 = [
     "id": 1000
   }
 ]
+
+export const categories = [
+        {
+            "description": null,
+            "name": "Clothing"
+        },
+        {
+            "description": null,
+            "name": "Sports and Fitness"
+        },
+        {
+            "description": null,
+            "name": "Food"
+        },
+        {
+            "description": null,
+            "name": "Clothing Accessories"
+        },
+        {
+            "description": null,
+            "name": "Home Appliances"
+        },
+        {
+            "description": null,
+            "name": "Kitchen"
+        },
+        {
+            "description": null,
+            "name": "Outdoor"
+        },
+        {
+            "description": null,
+            "name": "Office"
+        },
+        {
+            "description": null,
+            "name": "Toys"
+        },
+        {
+            "description": null,
+            "name": "Electronics"
+        },
+        {
+            "description": null,
+            "name": "Jewelry"
+        },
+        {
+            "description": null,
+            "name": "Books"
+        },
+        {
+            "description": null,
+            "name": "Pet Supplies"
+        }
+]
