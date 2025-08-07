@@ -1,10 +1,15 @@
 import bcrypt
+from uuid import uuid4
 from datetime import datetime
 from . import db
 
+
+def get_uuid():
+	return uuid4().hex
+
 class User(db.Model):
 	__tablename__ = "user"
-	id = db.Column(db.Integer, primary_key=True, unique=True)
+	id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
 	first_name = db.Column(db.String(120), nullable=False)
 	last_name = db.Column(db.String(120), nullable=False)
 	email = db.Column(db.String(50), unique=True, nullable=False)
@@ -43,7 +48,7 @@ class User(db.Model):
 
 class Seller(db.Model):
 	__tablename__ = "seller"
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
 	name = db.Column(db.String(255), nullable=False)
 	email = db.Column(db.String(255), unique=True, nullable=False)
 	phone = db.Column(db.String(20), unique=True, nullable=True)
@@ -91,7 +96,7 @@ class Product(db.Model):
 	timestamp = db.Column(db.DateTime, server_default=db.func.now())
 	updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
 
-	seller_id = db.Column(db.Integer, db.ForeignKey('seller.id', ondelete="CASCADE"), nullable=False)
+	seller_id = db.Column(db.String(32), db.ForeignKey('seller.id', ondelete="CASCADE"), nullable=False)
 	category_id = db.Column(db.Integer, db.ForeignKey("category.id", ondelete="CASCADE"), nullable=False)
 
 	def to_json(self):
@@ -110,8 +115,8 @@ class Product(db.Model):
 
 class Order(db.Model):
 	id = db.Column(db.Integer, primary_key=True, nullable=False)
-	seller_id = db.Column(db.Integer, db.ForeignKey("seller.id", ondelete="CASCADE"), nullable=False)
-	buyer_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+	seller_id = db.Column(db.String(32), db.ForeignKey("seller.id", ondelete="CASCADE"), nullable=False)
+	buyer_id = db.Column(db.String(32), db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 	total_price = db.Column(db.Float, nullable=False)
 	payment_status = db.Column(db.String(50), nullable=False)
 	payment_method = db.Column(db.String(50), nullable=False)
@@ -135,14 +140,14 @@ class OrderItems(db.Model):
 class Cart(db.Model):
 	__tablename__ = "cart"
 	id = db.Column(db.Integer, primary_key=True)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
+	user_id = db.Column(db.String(32), db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
 	product_id = db.Column(db.Integer, db.ForeignKey("product.id", ondelete="CASCADE"), nullable=False)
 	quantity = db.Column(db.Integer, nullable=False)
 	timestamp = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
 
 class LikedItem(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+	user_id = db.Column(db.String(32), db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 	product_id = db.Column(db.Integer, db.ForeignKey("product.id", ondelete="CASCADE"), nullable=False)
 	timestamp = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
 
