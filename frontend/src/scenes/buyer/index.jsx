@@ -16,7 +16,6 @@ import LoginBuyer from "../auth/LoginBuyer";
 const BuyerPage = () => {
 	const BASE_URL = useContext(BaseUrlContext)
 
-	
 	return (
 		<div className="app">
 			{/* <Navbar /> */}

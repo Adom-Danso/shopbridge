@@ -8,7 +8,7 @@ import { useContext } from "react";
 
 import { BaseUrlContext, InitialiaseAppContext } from "../../context";
 import { themeColors } from "../../theme";
-import axios from "axios";
+import httpClient from "../../httpClient";
 
 const SignUpBuyer = () => {
     const BASE_URL = useContext(BaseUrlContext)
@@ -18,17 +18,12 @@ const SignUpBuyer = () => {
 
     const handleSubmit = async (values) => {
         try {
-            const response = await axios.post(`${BASE_URL}/api/auth/buyer/register`, values, { withCredentials: true })
-            const data = await response.data;
-            console.log(`response is:`)
-            console.log(response)
-            console.log('data')
-            console.log(data)
-            console.log(values)
-            console.log(`Values are: ${JSON.stringify(values)}`);
-            if (response.status === 201) {
-                await initialiseApp()
-            }
+            const resp = await httpClient.post("/auth/buyer/register", values, { withCredentials: true })
+            const data = await resp.data;
+            if (resp.status === 201) {
+                localStorage.setItem("token", data.accessToken)
+                navigate("/")
+            } 
         } catch (error) {
             console.error(error)
         }

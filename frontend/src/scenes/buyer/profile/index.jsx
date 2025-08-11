@@ -1,66 +1,83 @@
 import Box from "@mui/material/Box";
-import { useTheme, Typography } from "@mui/material"
-import { themeColors } from "../../../theme"
-import Grid from "@mui/material/Grid"
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { data } from "react-router";
+import { useTheme, Typography } from "@mui/material";
+import { themeColors } from "../../../theme";
+import Grid from "@mui/material/Grid";
+import { useState, useEffect, use } from "react";
+import httpClient from "../../../httpClient";
 
 const sample = {
-	first_name: "Adom",
-	last_name: "Danso",
-	email: "dansoadom@gmail.com",
-	phone: "6726730263",
-	address1: "2048 Parkway Blvd",
-	address2: "",
-	zip_code: "V3E 3N2",
-	region: "British Columbia",
-}
+    first_name: "Adom",
+    last_name: "Danso",
+    email: "dansoadom@gmail.com",
+    phone: "6726730263",
+    address1: "2048 Parkway Blvd",
+    address2: "",
+    zip_code: "V3E 3N2",
+    region: "British Columbia",
+};
 
 const Profile = () => {
-	const theme = useTheme()
-	const colors = themeColors(theme.palette.mode)
-	const [currentUser, setCurrentUser] = useState(null)
+    const theme = useTheme();
+    const colors = themeColors(theme.palette.mode);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUserType, setCurrentUsertype] = useState(null);
 
-	const initialisePage = async () => {
+    const initialisePage = async () => {
         try {
-            const resp = await axios.get(`${BASE_URL}/api/auth/is-logged-in`, {withCredentials: true})
-			const data = resp.data
+            const resp = await httpClient.get("/auth/is-logged-in", {
+                withCredentials: true,
+            });
+            const data = resp.data;
+            console.log(data.user.firstName);
             if (resp.status === 200 && data.userType === "buyer") {
-                setCurrentUser(data.user)
+                setCurrentUser(data.user);
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
-	
-	useEffect(() => {
-		initialisePage()
-	}, [])
+    };
 
-	return (
-		<Box backgroundColor="blue" height="100%" display="flex" justifyContent="center" alignItems="center">
-			<Box backgroundColor="green" height="80%" width="80%">
-				<Box display="flex" justifyContent="center" p="10px">
-					<Typography variant="h2" fontWeight="bold">My Profile</Typography>
-				</Box>
-			</Box>
-			<Box sx={{ flexGrow: 1}}>
-				<Grid
-					container
-					sx={{
-						display: "grid",
-						gridTemplateRows: "1fr 1fr 1fr"
-					}}
-				>
-					<Grid size={12}>{currentUser.firstName}</Grid>
-					<Grid size={12}>{currentUser.lastName}</Grid>
-					<Grid size={12}>{currentUser.email}</Grid>
+    useEffect(() => {
+        initialisePage();
+    }, []);
 
-				</Grid>
-			</Box>
-		</Box>
-	)
-}
+    return currentUserType === "buyer" ? (
+        <Box
+            backgroundColor="blue"
+            minHeight="100vh"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Box
+                backgroundColor="green"
+                height="80%"
+                width="80%"
+                p={3}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+            >
+                <Typography variant="h2" fontWeight="bold" mb={3}>
+                    My Profile
+                </Typography>
 
-export default Profile
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography>{currentUser?.firstName}</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography>{currentUser?.lastName}</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography>{currentUser?.email}</Typography>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Box>
+    ) : (
+        <Typography>No one logged in</Typography>
+    );
+};
+
+export default Profile;

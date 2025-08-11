@@ -1,12 +1,12 @@
 import { useState, useContext } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import axios from "axios";
 
 import { BaseUrlContext } from "../../../context";
 import { mockDataProducts } from "../../data/mockData";
 import ProductCard from "./ProductCard";
 import ProductCardPopOver from "./ProductCardPopOver";
+import httpClient from "../../../httpClient";
 
 
 const Products = () => {
@@ -17,7 +17,7 @@ const Products = () => {
 
 	const getProducts = async () => {
 		try {
-			const response = await axios.get(`${BASE_URL}/api/dashboard`)
+			const response = await httpClient.get("/dashboard")
 		} catch (error) {
 			console.error(error)
 		}

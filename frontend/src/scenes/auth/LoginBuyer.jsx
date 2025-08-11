@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react";
 
 import { BaseUrlContext, InitialiaseAppContext } from "../../context";
 import { themeColors } from "../../theme";
-import axios from "axios";
+import httpClient from "../../httpClient";
 import { useNavigate } from "react-router";
 
 const LoginBuyer = () => {
@@ -20,9 +20,13 @@ const LoginBuyer = () => {
 
     const handleSubmit = async (values) => {
         try {
-            const resp = await axios.post(`${BASE_URL}/api/auth/login/buyer`, values, {withCredentials: true});
+            const resp = await httpClient.post("/auth/login/buyer", values, {withCredentials: true});
+            const data = await resp.data
             console.log(resp.data)
-            navigate("/profile")
+            if (resp.status === 200) {
+                localStorage.setItem("token", data.accessToken)
+                navigate("/profile")
+            }
         } catch (error) {
             console.error(error)
         }
@@ -30,7 +34,7 @@ const LoginBuyer = () => {
 
     const initialisePage = async () => {
         try {
-            resp = await axios.get(`${BASE_URL}/api/auth/is-logged-in`, {withCredentials: true})
+            const resp = await httpClient.get("/auth/is-logged-in", {withCredentials: true})
             if (resp.status === 200) {
                 navigate("/profile")
             }
