@@ -4,50 +4,53 @@ import Grid from "@mui/material/Grid";
 import { useFormik } from "formik";
 import { string, object as YupObject } from "yup";
 import { useTheme } from "@emotion/react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { BaseUrlContext, InitialiaseAppContext } from "../../context";
 import { themeColors } from "../../theme";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
-const SignUpBuyer = () => {
-    const BASE_URL = useContext(BaseUrlContext)
-    const initialiseApp = useContext(InitialiaseAppContext)
+const LoginBuyer = () => {
+    const BASE_URL = useContext(BaseUrlContext);
+    const initialiseApp = useContext(InitialiaseAppContext);
     const theme = useTheme();
     const colors = themeColors(theme.palette.mode);
+    const navigate = useNavigate();
 
     const handleSubmit = async (values) => {
         try {
-            const response = await axios.post(`${BASE_URL}/api/auth/buyer/register`, values, { withCredentials: true })
-            const data = await response.data;
-            console.log(`response is:`)
-            console.log(response)
-            console.log('data')
-            console.log(data)
-            console.log(values)
-            console.log(`Values are: ${JSON.stringify(values)}`);
-            if (response.status === 201) {
-                await initialiseApp()
+            const resp = await axios.post(`${BASE_URL}/api/auth/login/buyer`, values, {withCredentials: true});
+            console.log(resp.data)
+            navigate("/profile")
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const initialisePage = async () => {
+        try {
+            resp = await axios.get(`${BASE_URL}/api/auth/is-logged-in`, {withCredentials: true})
+            if (resp.status === 200) {
+                navigate("/profile")
             }
         } catch (error) {
             console.error(error)
         }
-    };
-
+    }
+    
+    useEffect(() => {
+        initialisePage()
+    }, [])
+    
     const formik = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
             email: "",
             password: "",
-            password2: "",
         },
         validationSchema: YupObject({
-            firstName: string().required("Required"),
-            lastName: string().required("Required"),
             email: string().email().required("Required"),
             password: string().required("Required"),
-            password2: string().required("Required"),
         }),
         onSubmit: (values) => handleSubmit(values),
     });
@@ -81,68 +84,8 @@ const SignUpBuyer = () => {
                             variant="h1"
                             sx={{ fontWeight: 500, color: colors.grey[100] }}
                         >
-                            SignUp
+                            Login
                         </Typography>
-                    </Grid>
-                    <Grid size={3}>
-                        <TextField
-                            fullWidth
-                            type="text"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.firstName}
-                            error={
-                                !!formik.touched.firstName &&
-                                !!formik.errors.firstName
-                            }
-                            helperText={
-                                formik.touched.firstName &&
-                                formik.errors.firstName
-                            }
-                            id="firstName"
-                            name="firstName"
-                            label="First Name"
-                            variant="filled"
-                            sx={{
-                                "& .MuiFormLabel-root": {
-                                    color: colors.grey[100],
-                                },
-                                "& .MuiInputBase-root": {
-                                    padding: "10px 0px",
-                                },
-                                padding: "0 5px 0 0",
-                            }}
-                        />
-                    </Grid>
-                    <Grid size={3}>
-                        <TextField
-                            fullWidth
-                            type="text"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.lastName}
-                            error={
-                                !!formik.touched.lastName &&
-                                !!formik.errors.lastName
-                            }
-                            helperText={
-                                formik.touched.lastName &&
-                                formik.errors.lastName
-                            }
-                            id="lastName"
-                            name="lastName"
-                            label="Last Name"
-                            variant="filled"
-                            sx={{
-                                "& .MuiFormLabel-root": {
-                                    color: colors.grey[100],
-                                },
-                                "& .MuiInputBase-root": {
-                                    padding: "10px 0px",
-                                },
-                                padding: "0 0 0 5px",
-                            }}
-                        />
                     </Grid>
                     <Grid size={6}>
                         <TextField
@@ -200,35 +143,6 @@ const SignUpBuyer = () => {
                             }}
                         />
                     </Grid>
-                    <Grid size={6}>
-                        <TextField
-                            fullWidth
-                            type="password"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.password2}
-                            error={
-                                !!formik.touched.password2 &&
-                                !!formik.errors.password2
-                            }
-                            helperText={
-                                formik.touched.password2 &&
-                                formik.errors.password2
-                            }
-                            id="password2"
-                            name="password2"
-                            label="Confirm Password"
-                            variant="filled"
-                            sx={{
-                                "& .MuiFormLabel-root": {
-                                    color: colors.grey[100],
-                                },
-                                "& .MuiInputBase-root": {
-                                    padding: "10px 0px",
-                                },
-                            }}
-                        />
-                    </Grid>
                     <Grid
                         size={6}
                         sx={{ display: "flex", justifyContent: "center" }}
@@ -241,7 +155,7 @@ const SignUpBuyer = () => {
                         size={6}
                         sx={{
                             display: "flex",
-                            justifyContent: "end",
+                            justifyContent: "space-between",
                             alignItems: "center",
                             height: "50px",
                             border: "1px solid grey",
@@ -252,7 +166,13 @@ const SignUpBuyer = () => {
                             variant="body2"
                             sx={{ fontWeight: 500, color: colors.grey[100] }}
                         >
-                            Already have an account?
+                            Don't have an account?
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 500, color: colors.grey[100] }}
+                        >
+                            Forgotten password?
                         </Typography>
                     </Grid>
                 </Grid>
@@ -261,5 +181,4 @@ const SignUpBuyer = () => {
     );
 };
 
-export default SignUpBuyer;
-
+export default LoginBuyer;

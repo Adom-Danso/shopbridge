@@ -2,6 +2,9 @@ import Box from "@mui/material/Box";
 import { useTheme, Typography } from "@mui/material"
 import { themeColors } from "../../../theme"
 import Grid from "@mui/material/Grid"
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { data } from "react-router";
 
 const sample = {
 	first_name: "Adom",
@@ -14,10 +17,26 @@ const sample = {
 	region: "British Columbia",
 }
 
-
 const Profile = () => {
 	const theme = useTheme()
 	const colors = themeColors(theme.palette.mode)
+	const [currentUser, setCurrentUser] = useState(null)
+
+	const initialisePage = async () => {
+        try {
+            const resp = await axios.get(`${BASE_URL}/api/auth/is-logged-in`, {withCredentials: true})
+			const data = resp.data
+            if (resp.status === 200 && data.userType === "buyer") {
+                setCurrentUser(data.user)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+	
+	useEffect(() => {
+		initialisePage()
+	}, [])
 
 	return (
 		<Box backgroundColor="blue" height="100%" display="flex" justifyContent="center" alignItems="center">
@@ -34,7 +53,9 @@ const Profile = () => {
 						gridTemplateRows: "1fr 1fr 1fr"
 					}}
 				>
-					<Grid size={12}>Adom</Grid>
+					<Grid size={12}>{currentUser.firstName}</Grid>
+					<Grid size={12}>{currentUser.lastName}</Grid>
+					<Grid size={12}>{currentUser.email}</Grid>
 
 				</Grid>
 			</Box>

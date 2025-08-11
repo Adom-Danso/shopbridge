@@ -201,7 +201,7 @@ export const appTheme = () => {
 	const toggleColorMode = useMemo(() => ({
     toggleColorMode: () =>
       setMode((prev) => (prev === "light" ? "dark" : "light")),
-  }),[]); // function for toggling color mode
+	}),[]); // function for toggling color mode
 
 	const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]) // creating and caching the theme setting 
 

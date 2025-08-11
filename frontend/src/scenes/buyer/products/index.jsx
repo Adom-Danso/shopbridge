@@ -1,41 +1,27 @@
+import { useState, useContext } from "react";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid"
-import { useState } from "react";
+import Grid from "@mui/material/Grid";
+import axios from "axios";
 
+import { BaseUrlContext } from "../../../context";
 import { mockDataProducts } from "../../data/mockData";
 import ProductCard from "./ProductCard";
 import ProductCardPopOver from "./ProductCardPopOver";
 
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-
-
-const sample = {
-	id: 1,
-	name: "Waterproof Rain Boots",
-	description: "Stay dry with these stylish waterproof rain boots.",
-	price: 69.99,
-	stock: 286,
-	image_url: "http://dummyimage.com/210x100.png/cc0000/ffffff",
-	category: "Clothing - Footwear",
-	seller: "Stark-Lockman"
-}
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
-}));
-
 
 const Products = () => {
+	const BASE_URL = useContext(BaseUrlContext)
+	
 	const [selectedProduct, setSelectedProduct] = useState(null);
 	const [open, setOpen] = useState(false);
+
+	const getProducts = async () => {
+		try {
+			const response = await axios.get(`${BASE_URL}/api/dashboard`)
+		} catch (error) {
+			console.error(error)
+		}
+	}
 
 	const handleOpen = (product) => {
 		setSelectedProduct(product);
