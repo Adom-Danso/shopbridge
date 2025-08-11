@@ -10,12 +10,11 @@ auth = Blueprint("auth", __name__)
 @jwt_required(optional=True)
 def is_logged_in():
 	claims = get_jwt()
-	if current_user:
+	if current_user and claims:
 		user = current_user.to_json()
+		return jsonify({"user": user, "userType": claims["userType"]}), 200
 	else:
-		user = None
-
-	return jsonify({"user": user, "userType": claims["userType"]}), 200
+		return jsonify({"user": None, "userType": None}), 200
 
 @auth.route("/register/buyer", methods=["POST"])
 def register_buyer():
