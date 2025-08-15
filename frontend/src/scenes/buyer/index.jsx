@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { Routes, Route } from "react-router";
 import { Box } from "@mui/material"
 
-import { BaseUrlContext } from "../../context";
 
 import Profile from "./profile"
 import Navbar from "./components/Navbar";
@@ -14,7 +13,6 @@ import LoginBuyer from "../auth/LoginBuyer";
 
 
 const BuyerPage = () => {
-	const BASE_URL = useContext(BaseUrlContext)
 
 	return (
 		<div className="app">

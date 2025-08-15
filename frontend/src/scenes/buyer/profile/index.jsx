@@ -2,34 +2,26 @@ import Box from "@mui/material/Box";
 import { useTheme, Typography } from "@mui/material";
 import { themeColors } from "../../../theme";
 import Grid from "@mui/material/Grid";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, useContext } from "react";
 import httpClient from "../../../httpClient";
 
-const sample = {
-    first_name: "Adom",
-    last_name: "Danso",
-    email: "dansoadom@gmail.com",
-    phone: "6726730263",
-    address1: "2048 Parkway Blvd",
-    address2: "",
-    zip_code: "V3E 3N2",
-    region: "British Columbia",
-};
+import { UserContext } from "../../../context";
+
 
 const Profile = () => {
+    const [currentUser, setCurrentUser] = useContext(UserContext);
+
     const theme = useTheme();
     const colors = themeColors(theme.palette.mode);
-    const [currentUser, setCurrentUser] = useState(null);
     const [currentUserType, setCurrentUsertype] = useState(null);
 
     const initialisePage = async () => {
         try {
-            const resp = await httpClient.get("/auth/is-logged-in", {
-                withCredentials: true,
-            });
+            const resp = await httpClient.get("/auth/is-logged-in");
             const data = resp.data;
             console.log(data.user.firstName);
             if (resp.status === 200 && data.userType === "buyer") {
+                setCurrentUsertype(data.userType)
                 setCurrentUser(data.user);
             }
         } catch (error) {
@@ -38,7 +30,7 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        initialisePage();
+        // initialisePage();
     }, []);
 
     return currentUserType === "buyer" ? (

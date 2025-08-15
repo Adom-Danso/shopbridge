@@ -2,7 +2,6 @@ import { useState, useContext } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-import { BaseUrlContext } from "../../../context";
 import { mockDataProducts } from "../../data/mockData";
 import ProductCard from "./ProductCard";
 import ProductCardPopOver from "./ProductCardPopOver";
@@ -10,7 +9,6 @@ import httpClient from "../../../httpClient";
 
 
 const Products = () => {
-	const BASE_URL = useContext(BaseUrlContext)
 	
 	const [selectedProduct, setSelectedProduct] = useState(null);
 	const [open, setOpen] = useState(false);

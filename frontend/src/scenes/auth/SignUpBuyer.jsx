@@ -5,27 +5,31 @@ import { useFormik } from "formik";
 import { string, object as YupObject } from "yup";
 import { useTheme } from "@emotion/react";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 
-import { BaseUrlContext, InitialiaseAppContext } from "../../context";
 import { themeColors } from "../../theme";
 import httpClient from "../../httpClient";
+import { UserContext, UserTypeContext } from "../../context";
 
 const SignUpBuyer = () => {
-    const BASE_URL = useContext(BaseUrlContext)
-    const initialiseApp = useContext(InitialiaseAppContext)
+    const [currentUser, setCurrentUser] = useContext(UserContext);
+    const [currentUserType, setCurrentUserType] = useContext(UserTypeContext);
+
     const theme = useTheme();
     const colors = themeColors(theme.palette.mode);
+    const navigate = useNavigate();
 
     const handleSubmit = async (values) => {
         try {
-            const resp = await httpClient.post("/auth/buyer/register", values, { withCredentials: true })
+            const resp = await httpClient.post("/auth/buyer/register", values);
             const data = await resp.data;
             if (resp.status === 201) {
-                localStorage.setItem("token", data.accessToken)
-                navigate("/")
-            } 
+                setCurrentUser(data.user);
+                setCurrentUserType(data.userType);
+                navigate("/profile");
+            }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     };
 
@@ -257,4 +261,3 @@ const SignUpBuyer = () => {
 };
 
 export default SignUpBuyer;
-

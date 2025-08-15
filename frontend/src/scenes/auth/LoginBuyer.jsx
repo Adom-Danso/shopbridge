@@ -4,49 +4,35 @@ import Grid from "@mui/material/Grid";
 import { useFormik } from "formik";
 import { string, object as YupObject } from "yup";
 import { useTheme } from "@emotion/react";
-import { useContext, useEffect, useState } from "react";
-
-import { BaseUrlContext, InitialiaseAppContext } from "../../context";
-import { themeColors } from "../../theme";
-import httpClient from "../../httpClient";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
 
+import { themeColors } from "../../theme";
+import httpClient from "../../httpClient";
+import { UserContext, UserTypeContext } from "../../context";
+
 const LoginBuyer = () => {
-    const BASE_URL = useContext(BaseUrlContext);
-    const initialiseApp = useContext(InitialiaseAppContext);
+    const [currentUser, setCurrentUser] = useContext(UserContext);
+    const [currentUserType, setCurrentUserType] = useContext(UserTypeContext);
+
     const theme = useTheme();
     const colors = themeColors(theme.palette.mode);
     const navigate = useNavigate();
 
     const handleSubmit = async (values) => {
         try {
-            const resp = await httpClient.post("/auth/login/buyer", values, {withCredentials: true});
-            const data = await resp.data
-            console.log(resp.data)
+            const resp = await httpClient.post("/auth/login/buyer", values);
+            const data = await resp.data;
             if (resp.status === 200) {
-                localStorage.setItem("token", data.accessToken)
-                navigate("/profile")
+                setCurrentUser(data.user);
+                setCurrentUserType(data.userType);
+                navigate("/profile");
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
+    };
 
-    const initialisePage = async () => {
-        try {
-            const resp = await httpClient.get("/auth/is-logged-in", {withCredentials: true})
-            if (resp.status === 200) {
-                navigate("/profile")
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    
-    useEffect(() => {
-        initialisePage()
-    }, [])
-    
     const formik = useFormik({
         initialValues: {
             email: "",
