@@ -2,37 +2,30 @@ import Box from "@mui/material/Box";
 import { useTheme, Typography } from "@mui/material";
 import { themeColors } from "../../../theme";
 import Grid from "@mui/material/Grid";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import httpClient from "../../../httpClient";
-
-import { UserContext } from "../../../context";
 
 
 const Profile = () => {
-    const [currentUser, setCurrentUser] = useContext(UserContext);
-
+    const [currentUser, setCurrentUser] = useState(null)
+    const [currentUserType, setCurrentUserType] = useState(null)
     const theme = useTheme();
     const colors = themeColors(theme.palette.mode);
-    const [currentUserType, setCurrentUsertype] = useState(null);
 
     const initialisePage = async () => {
         try {
             const resp = await httpClient.get("/auth/is-logged-in");
-            const data = resp.data;
-            console.log(data.user.firstName);
-            if (resp.status === 200 && data.userType === "buyer") {
-                setCurrentUsertype(data.userType)
-                setCurrentUser(data.user);
-            }
+            const data = await resp.data;
+            setCurrentUser(data.user)
+            setCurrentUserType(data.userType)
         } catch (error) {
             console.error(error);
         }
-    };
+    }
 
     useEffect(() => {
-        // initialisePage();
-    }, []);
-
+        initialisePage()
+    }, [])
     return currentUserType === "buyer" ? (
         <Box
             backgroundColor="blue"

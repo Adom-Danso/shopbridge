@@ -12,8 +12,8 @@ import httpClient from "../../httpClient";
 import { UserContext, UserTypeContext } from "../../context";
 
 const SignUpBuyer = () => {
-    const [currentUser, setCurrentUser] = useContext(UserContext);
-    const [currentUserType, setCurrentUserType] = useContext(UserTypeContext);
+    const {currentUser, setCurrentUser} = useContext(UserContext);
+    const {currentUserType, setCurrentUserType} = useContext(UserTypeContext);
 
     const theme = useTheme();
     const colors = themeColors(theme.palette.mode);
