@@ -109,8 +109,8 @@ class Product(db.Model):
 			"imageUrl": self.image_url,
 			"timestamp": self.timestamp.isoformat(),
 			"updatedAt": self.updated_at.isoformat(),
-			"sellerId": self.seller_id,
-			"categoryId": self.category_id
+			"seller": db.session.query(Seller).get(self.seller_id),
+			"categoryId": db.session.query(Category).get(self.category_id).name
 		}
 
 class Order(db.Model):

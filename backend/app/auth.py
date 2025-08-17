@@ -1,20 +1,12 @@
 from . import db
 from .models import User, Seller
 from flask import Blueprint, make_response, request, jsonify, session
-from flask_jwt_extended import create_access_token, get_jwt, jwt_required, current_user
 
 
 auth = Blueprint("auth", __name__)
 
 @auth.route("/is-logged-in", methods=["GET"])
 def is_logged_in():
-	# claims = get_jwt()
-	# if current_user and claims:
-	# 	user = current_user.to_json()
-	# 	return jsonify({"user": user, "userType": claims["userType"]}), 200
-	# else:
-	# 	return jsonify({"user": None, "userType": None}), 200
-
 	user_id = session.get("userId")
 	user_type = session.get("userType")
 	user = None
@@ -42,8 +34,8 @@ def register_buyer():
 	db.session.add(new_user)
 	db.session.commit()
 
-	access_token = create_access_token(identity=new_user, additional_claims={"userType":"buyer"})
-	# resp = 
+	session["userId"] = new_user.id
+	session["userType"] = "buyer"
 
 	return jsonify({"msg": "Account succesfully created", "accessToken": access_token}), 201
 
@@ -56,12 +48,9 @@ def login_buyer():
 	if not user or not user.check_password(request.json.get("password")):
 		return jsonify({"msg": "Invalid email or password"}), 401
 	
-	# access_token = create_access_token(identity=user, additional_claims={"userType":"buyer"})
-
 	session["userId"] = user.id
 	session["userType"] = "buyer"
-	# print(f"User id: {user.id}", flush=True)
-	# print(f"Session user id: {session["userId"]}", flush=True)
+
 	return jsonify({"msg": "Login succesful"}), 200
 
 @auth.route("/register/seller", methods=["POST"])
@@ -76,9 +65,10 @@ def register_seller():
 	db.session.add(new_seller)
 	db.session.commit()
 
-	access_token = create_access_token(identity=new_seller, additional_claims={"userType": "seller"})
+	session["userId"] = new_seller.id
+	session["userType"] = "seller"
 
-	return jsonify({"msg": "Account succesfully created", "accessToken": access_token}), 201
+	return jsonify({"msg": "Account succesfully created"}), 201
 
 @auth.route("/login/seller", methods=["POST"])
 def login_seller():
@@ -89,19 +79,7 @@ def login_seller():
 	if not seller or not seller.check_password(request.json.get("password")):
 		return jsonify({"msg": "Invalid email or password"}), 401
 	
-	access_token = create_access_token(identity=seller, additional_claims={"userType": "seller"})
+	session["userId"] = seller.id
+	session["userType"] = "seller"
 
-	return jsonify({"msg": "Login successful", "accessToken": access_token}), 201
-
-# @auth.route("/set-cookie", methods=["POST"])
-# def set_cookie():
-# 	resp = make_response({"msg": "Cookie set"})
-# 	resp.set_cookie(
-# 		"auth_token",
-# 		request.json.get("token"),
-# 		httponly=True,
-# 		secure=True,
-# 		samesite="None"
-# 	)
-
-# 	return resp
+	return jsonify({"msg": "Login successful"}), 201
