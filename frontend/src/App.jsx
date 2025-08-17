@@ -27,7 +27,8 @@ const App = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [currentUserType, setCurrentUserType] = useState(null);
 
-    const getIsLoggedIn = async () => {
+
+    const initialiseApp = async () => {
         try {
             const response = await httpClient.get("/auth/is-logged-in");
             const data = await response.data;
@@ -36,10 +37,6 @@ const App = () => {
         } catch (error) {
             console.error(error);
         }
-    };
-
-    const initialiseApp = async () => {
-        await getIsLoggedIn();
     };
 
     useEffect(() => {
@@ -55,12 +52,14 @@ const App = () => {
                         <Routes>
                             <Route path="/register/buyer" element={<SignUpBuyer />} />
                             <Route path="/login/buyer" element={<LoginBuyer />} />
-                            { currentUserType === null ? (
-                                <Route element={<SellerPage />}>
-                                    <Route path="/products" element={<Products_S setSelectedProduct={setSelectedProduct} />} />
-                                    <Route path="/add-product" element={<AddProduct operation="add" selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />} />
-                                    <Route path="/update-product" element={<AddProduct operation="edit" selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />} />
-                                    <Route path="/orders" element={<Orders />} />
+                            
+                            { currentUserType === "seller" ? (
+                                <Route path="/" element={<SellerPage />}>
+                                    <Route index element={<Products_S />} />
+                                    <Route path="products" element={<Products_S />} />
+                                    <Route path="add-product" element={<AddProduct />} />
+                                    <Route path="update-product" element={<AddProduct operation="edit" />} />
+                                    <Route path="orders" element={<Orders />} />
                                 </Route>
                             ) : (
                                 <Route path="/" element={<BuyerPage />}>

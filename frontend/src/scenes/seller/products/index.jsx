@@ -6,9 +6,10 @@ import { mockDataProducts } from "../../data/mockData"
 import { themeColors } from "../../../theme";
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import Button from "@mui/material/Button"
-import { useNavigate } from 'react-router'
+import { useNavigate, useOutletContext } from 'react-router'
 
-const Products = ({ setSelectedProduct }) => {
+const Products = () => {
+	const [selectedProduct, setSelectedProduct] = useOutletContext()
 	const theme = useTheme();
 	const colors = themeColors(theme.palette.mode);
 	const [selectedRows, setSelectedRows] = useState([])

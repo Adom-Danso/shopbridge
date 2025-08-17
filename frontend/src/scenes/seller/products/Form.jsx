@@ -2,13 +2,15 @@ import { useFormik } from "formik"
 import { object as YupObject, string, number } from 'yup'
 import { Box, Grid, Typography, useTheme, TextField, MenuItem } from "@mui/material"
 import Button from "@mui/material/Button"
-import { useNavigate } from "react-router"
+import { useNavigate, useOutletContext } from "react-router"
 
 import { themeColors } from "../../../theme";
 
 // option to make product visible or not
 
-const AddProduct = ({ operation, selectedProduct, setSelectedProduct }) => {
+const AddProduct = ({ operation }) => {
+	const [selectedProduct, setSelectedProduct] = useOutletContext()
+
 	const theme = useTheme();
 	const colors = themeColors(theme.palette.mode);
 	const navigate = useNavigate()

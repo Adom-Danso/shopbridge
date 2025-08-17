@@ -1,26 +1,48 @@
-import { Outlet, Route } from "react-router";
+import { Outlet, Route, useNavigate } from "react-router";
 import { Box } from "@mui/material"
+import { useContext, useEffect } from "react";
+import Grid from "@mui/material/Grid";
 
 
-import Profile from "./profile"
+import httpClient from "../../httpClient";
+
 import Navbar from "./components/Navbar";
-import Products from "./products";
 import ThemeButton from "./components/ThemeButton";
+import { UserContext, UserTypeContext } from "../../context";
 
-import SignUpBuyer from "../auth/SignUpBuyer";
-import LoginBuyer from "../auth/LoginBuyer";
 
 
 const BuyerPage = () => {
+	const { currentUser, setCurrentUser } = useContext(UserContext);
+	const {currentUserType, setCurrentUserType} = useContext(UserTypeContext);
+
+	const initialisePage = async () => {
+        try {
+            const response = await httpClient.get("/auth/is-logged-in");
+            const data = await response.data;
+            setCurrentUser(data.user);
+            setCurrentUserType(data.userType);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+	useEffect(() => {
+		initialisePage()
+	}, [])
 
 	return (
-		<div className="app">
-			<Navbar />
-			<Box className="content" sx={{ margin: "84px 0 0 0"}}>
-				<Outlet />
-				<ThemeButton />
-			</Box>
-		</div>
+		<Grid container className="app">
+			<Grid size={12}>
+				<Navbar />
+			</Grid>
+			<Grid size={12}>
+				<Box className="content" sx={{ padding: "64px 0 0 0"}}>
+					<Outlet />
+					<ThemeButton />
+				</Box>
+			</Grid>
+		</Grid>
 	)
 }
 

@@ -41,7 +41,7 @@ def create_app():
 	app.config["SESSION_COOKIE_HTTPONLY"] = True
 	app.config["SESSION_COOKIE_SAMESITE"] = "none"
 	app.config["SESSION_COOKIE_SECURE"] = True
-	app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=30)
+	app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=1)
 
 	db.init_app(app)
 	sess.init_app(app)
